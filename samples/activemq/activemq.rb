@@ -7,7 +7,7 @@ require 'jms4r'
 module ActiveMQ
   include JMS
 
-  class ActiveMQ::Session < AbstractSession
+  class Session < AbstractSession
 
     attr_accessor :ctx
 

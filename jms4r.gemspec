@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Eric Monti"]
-  s.date = %q{2009-12-09}
-  s.description = %q{A general purpose JMS library for JRuby}
+  s.date = %q{2009-12-10}
+  s.description = %q{A generalized JMS abstraction library for JRuby}
   s.email = %q{emonti@matasano.com}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -23,7 +23,15 @@ Gem::Specification.new do |s|
      "LICENSE",
      "README.rdoc",
      "Rakefile",
+     "VERSION",
+     "jms4r.gemspec",
      "lib/jms4r.rb",
+     "lib/jms4r/browser.rb",
+     "lib/jms4r/listener.rb",
+     "lib/jms4r/receiver.rb",
+     "lib/jms4r/sender.rb",
+     "lib/jms4r/session.rb",
+     "samples/activemq/activemq.rb",
      "test/jms4r_test.rb",
      "test/test_helper.rb"
   ]
@@ -31,7 +39,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.5}
-  s.summary = %q{A general purpose JMS library for JRuby}
+  s.summary = %q{A generalized JMS abstraction library for JRuby}
   s.test_files = [
     "test/jms4r_test.rb",
      "test/test_helper.rb"
