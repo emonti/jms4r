@@ -9,7 +9,7 @@ module JMS
     #
     # Optionally yields(self) to a block if one is given.
     def initialize(*args)
-      init_session(*args)
+      self.init_session(*args)
       yield(self) if block_given?
       @conn.start()
     end
@@ -40,45 +40,69 @@ module JMS
     #
     # Some implementations may want to override this to return a Destination
     # instead, depending on the underlying JMS implementation.
-    def queue(qname)
-      @sess.createQueue(qname)
+    def queue(q)
+      if q.kind_of? javax.jms.Queue
+        q
+      else
+        @sess.createQueue(q)
+      end
     end
+    alias create_queue queue
 
     # This method is called to resolve a topic name string to a Topic object 
     # suitable for passing as an argument to various JMS API functions.
     #
     # Some implementations may want to override this to return a Destination
     # instead, depending on the underlying JMS implementation.
-    def topic(tname)
-      @sess.createTopic(tname)
+    def topic(t)
+      if t.kind_of? javax.jms.Topic
+        t
+      else
+        @sess.createTopic(tname)
+      end
     end
+    alias create_topic topic
 
     # Creates a JMS Sender for a given queue which is
     # used to put messages on the queue.
     #
+    # See also Sender
+    #
     # Most implementations take only one argument:
     #   qname: The name of the queue.
     def create_sender(*args)
-      ::JMS::Sender.new(self, *args)
+      Sender.new(self, *args)
     end
 
     # Creates a JMS Receiver for a given queue which is used to 'consume'
     # or "receive and remove" messages from the queue.
     #
+    # See also Receiver
+    #
     # Most implementations take two arguments:
     #   qname: The name of the queue.
     #   sel: an optional 'message selector' string.
     def create_receiver(*args)
-      ::JMS::Receiver.new(self, *args)
+      r=Receiver.new(self, *args)
+      if block_given?
+        r.message_listener = Listener.new {|msg| yield(msg)}
+      end
+      return r
     end
 
     # Creates a JMS Receiver for a given queue.
+    #
+    # See also Browser
     #
     # Most implementations take two arguments:
     #   qname: The name of the queue.
     #   sel: an optional 'message selector' string.
     def create_browser(*args)
-      ::JMS::Browser.new(self, *args)
+      Browser.new(self, *args)
+    end
+
+    def create_listener(&block)
+      Listener.new(&block)
     end
 
     # Attempts to compose a populated JMS message typed based on msg type.
@@ -87,6 +111,7 @@ module JMS
     # use the JMS @sess object directly to compose messages instead.
     #
     # * If msg is nil, an empty 'Message' containing only headers is returned.
+    # * If msg is a kind of javax.jms.Message, it is returned.
     # * Pass a Ruby String, a TextMessage is returned.
     # * For a ByteMessage, either pass a Java::byte[] object directly or 
     #   {:bytes => [...]}. A ByteMessage is returned.
@@ -99,6 +124,8 @@ module JMS
       m=nil
 
       case msg
+      when javax.jms.Message
+        return msg
       when nil
         m = @sess.createMessage()
 

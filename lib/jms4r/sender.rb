@@ -1,4 +1,4 @@
-module WMQ
+module JMS
   class Sender
     attr_accessor :sender, :parent
 
@@ -9,9 +9,7 @@ module WMQ
     end
 
     def send_message(msg)
-      m = @sess.createTextMessage()
-      m.setText(msg)
-      @sender.send(m)
+      @sender.send(@parent.create_msg(msg))
     end
 
     def method_missing(*args)
