@@ -23,6 +23,10 @@ module JMS
       end
     end
 
+    def listen(&blk)
+      self.setMessageListener( Listener.new(&blk) )
+    end
+
     def method_missing(*args)
       @receiver.__send__ *args
     end
