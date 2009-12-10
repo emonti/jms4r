@@ -10,7 +10,15 @@ module JMS
     end
 
     def while_receive(timeout)
-      while msg=@receiver.receive(timeout)
+      prc =
+        if(timeout == 0)
+          lambda {|t| @receiver.receive() }
+        elsif timeout.nil?
+          lambda {|t| @receiver.receiveNoWait() }
+        else
+          lambda {|t| @receiver.receive(t) }
+        end
+      while msg=prc.call(timeout)
         yield(msg)
       end
     end
