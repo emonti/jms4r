@@ -1,17 +1,18 @@
 require 'rubygems'
 require 'rake'
+require 'rake/clean'
 
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
+    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
     gem.name = "jms4r"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{A generalized JMS abstraction library for JRuby}
+    gem.description = %Q{A generalized JMS abstraction library for JRuby}
     gem.email = "emonti@matasano.com"
     gem.homepage = "http://github.com/emonti/jms4r"
     gem.authors = ["Eric Monti"]
-    gem.add_development_dependency "thoughtbot-shoulda"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+    gem.platform = 'java'
   end
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
