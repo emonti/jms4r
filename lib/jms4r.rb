@@ -1,7 +1,6 @@
-include Java
 
 module JMS
-
+  include Java
 end
 
 require 'jms4r/session.rb'
