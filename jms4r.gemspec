@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
      "lib/jms4r.rb",
      "lib/jms4r/browser.rb",
      "lib/jms4r/listener.rb",
+     "lib/jms4r/message.rb",
      "lib/jms4r/receiver.rb",
      "lib/jms4r/sender.rb",
      "lib/jms4r/session.rb",
