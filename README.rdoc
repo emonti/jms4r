@@ -1,6 +1,10 @@
 = jms4r
 
-Description goes here.
+A generalized JMS abstraction library for JRuby
+
+== Synopsis
+
+See samples/
 
 == Note on Patches/Pull Requests
  
