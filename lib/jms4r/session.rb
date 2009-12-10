@@ -47,6 +47,7 @@ module JMS
         @sess.createQueue(q)
       end
     end
+
     alias create_queue queue
 
     # This method is called to resolve a topic name string to a Topic object 
@@ -61,6 +62,7 @@ module JMS
         @sess.createTopic(tname)
       end
     end
+
     alias create_topic topic
 
     # Creates a JMS Sender for a given queue which is
@@ -73,6 +75,7 @@ module JMS
     def create_sender(*args)
       Sender.new(self, *args)
     end
+    alias sender create_sender
 
     # Creates a JMS Receiver for a given queue which is used to 'consume'
     # or "receive and remove" messages from the queue.
@@ -89,6 +92,7 @@ module JMS
       end
       return r
     end
+    alias receiver create_receiver
 
     # Creates a JMS Receiver for a given queue.
     #
@@ -101,9 +105,13 @@ module JMS
       Browser.new(self, *args)
     end
 
+    alias browser create_browser
+
     def create_listener(&block)
       Listener.new(&block)
     end
+
+    alias listener create_listener
 
     # Attempts to compose a populated JMS message typed based on msg type.
     # Returns the message after it has been created (and populated with msg

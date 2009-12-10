@@ -8,4 +8,5 @@ require 'jms4r/receiver.rb'
 require 'jms4r/browser.rb'
 require 'jms4r/sender.rb'
 require 'jms4r/listener.rb'
+require 'jms4r/message.rb'
 
