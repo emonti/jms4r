@@ -9,7 +9,7 @@ module JMS
       @receiver = @sess.createReceiver(parent.queue(qname), sel)
     end
 
-    def while_receive(timeout)
+    def while_receive(timeout=nil)
       prc =
         if(timeout == 0)
           lambda {|t| @receiver.receive() }
