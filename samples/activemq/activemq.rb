@@ -21,7 +21,7 @@ module ActiveMQ
       env.each {|k,v| e.put(k, v)} if env
 
       @ctx = javax.naming.InitialContext.new(e)
-      @factory = ctx.lookup("ConnectionFactory")
+      @factory = @ctx.lookup("ConnectionFactory")
       @conn = @factory.createConnection()
       @sess = @conn.createSession(false, javax.jms.Session::AUTO_ACKNOWLEDGE)
     end
