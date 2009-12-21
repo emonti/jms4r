@@ -5,12 +5,12 @@
 
 Gem::Specification.new do |s|
   s.name = %q{jms4r}
-  s.version = "0.1.0"
+  s.version = "0.2.0"
   s.platform = %q{java}
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Eric Monti"]
-  s.date = %q{2009-12-10}
+  s.date = %q{2009-12-21}
   s.description = %q{A generalized JMS abstraction library for JRuby}
   s.email = %q{emonti@matasano.com}
   s.extra_rdoc_files = [
