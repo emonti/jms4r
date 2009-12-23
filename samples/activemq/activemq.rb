@@ -39,14 +39,27 @@ end
 
 if __FILE__ == $0
   require 'irb'
+
+  unless host=ARGV.shift 
+    STDERR.puts "Usage: #{File.basename $0} host [port] [queue]"
+    exit 1
+  end
+
+  port = ARGV.shift || 61616
+  qname = ARGV.shift || 'loopback_test'
+
   @rcv, @snd, @brws = nil
-  @sess = ActiveMQ::Session.new('192.168.11.70', 61616) do |this|
-    qname = "loopback_test"
+  @sess = ActiveMQ::Session.new('192.168.11.70', port.to_i) do |this|
     @snd = this.create_sender(qname)
     @brws = this.create_browser(qname)
     @rcv = this.create_receiver(qname)
   end
 
+  STDERR.puts "@sess = #{@sess.inspect}",
+              "@rcv = #{@rcv.inspect}",
+              "@snd = #{@snd.inspect}",
+              "@brws= #{@brws.inspect}"
   IRB.start
 
 end
+

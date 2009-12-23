@@ -1,0 +1,86 @@
+#!/usr/bin/env jruby
+
+require 'optparse'
+require 'activemq'
+
+$consume = nil
+$save=nil
+$loop=nil
+$list=nil
+
+opts = OptionParser.new do |o|
+  o.banner = "Usage: #{File.basename $0} [options] url qname"
+
+  o.on_tail("-h", "--help", "Show this message") do
+    raise o.to_s
+  end
+
+  o.on("-c", "--[no-]consume", "Consume or just browse messages.",
+             "  (Default: browse)") { |c| $consume = c }
+
+  o.on("-s", "--save=PATH", "Save serialized messages to PATH.",
+             "  (named with put time as an id)") {|s| $save = s }
+
+  o.on("-l", "--[no-]loop", "Loops endlessly consuming messages") {|l| $loop=l }
+  o.on("-D", "--dump", "Lists queues and exits",
+             "  (not implemented)") { $list=true }
+end
+
+
+begin
+  opts.parse!(ARGV)
+  raise opts.banner unless \
+    url=ARGV.shift and 
+    ($list or qname=ARGV.shift) and
+    ARGV.shift.nil?
+rescue
+  STDERR.puts $!
+  exit 1
+end
+
+
+# define a block method with which to slurp messages
+def slurp(msg)
+  if $save
+    tstamp = (msg.props["MESSAGE_ID"] || Time.now.to_i)
+    fo = java.io.FileOutputStream.new(File.join($save, "#{tstamp}.ser"))
+    oo = java.io.ObjectOutputStream.new(fo)
+    oo.writeObject(msg)
+    oo.close
+    fo.close
+  end
+
+  puts "-="*30 +  "-"
+  puts msg, msg.props.sort.map {|k,v| "  #{k} = #{v}"}
+  puts "[*] Full Text:", msg.text if msg.respond_to?(:text)
+  puts
+end
+
+begin
+  # create our connection
+  sess = ActiveMQ::Session.new(url)
+
+  # lookup the queue name and get a 'destination'
+  queue = sess.lookup(qname)
+rescue javax.naming.NameNotFoundException
+  sess.close if sess
+  STDERR.puts "Error: #{$!}"
+  exit 1
+end
+
+rcvr = sess.create_receiver(queue)
+brws = sess.create_browser(queue)
+
+# either consume or browse all messages in the queue
+if $loop
+  puts "[*] Waiting for Messages (#{brws.messages.size} in queue):"
+  rcvr.while_receive 0, &method(:slurp)
+elsif $consume
+  puts "[*] Consuming #{brws.messages.size} Messages:"
+  rcvr.while_receive nil, &method(:slurp)
+else
+  puts "[*] Browsing #{brws.messages.size} Messages:"
+  brws.each_message &method(:slurp)
+end
+
+sess.close
