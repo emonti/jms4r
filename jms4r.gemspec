@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Eric Monti"]
-  s.date = %q{2009-12-21}
+  s.date = %q{2009-12-23}
   s.description = %q{A generalized JMS abstraction library for JRuby}
   s.email = %q{emonti@matasano.com}
   s.extra_rdoc_files = [
@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
      "lib/jms4r/sender.rb",
      "lib/jms4r/session.rb",
      "samples/activemq/activemq.rb",
+     "samples/activemq/amq_slurp",
      "test/jms4r_test.rb",
      "test/test_helper.rb"
   ]
